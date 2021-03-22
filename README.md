@@ -11,8 +11,8 @@ The goal of this project is to replicate the operations of a state machine using
 In order to do so, we need to solve consensus. The CAP theorem ensures that : *consensus is impossible to solve in an asynchronous message-passing system if at least one process may crash*. We therefore need to find a less strict form of consensus that is achievable.
 This is the Paxos/Synod algorithm, which combines:
 * **Obstruction-Free Consensus** (*ofcons*)  
-  * Same Validity and Agreement as consensus 
-  * Termination : 
+  * Same Validity and Agreement as consensus,
+  * Termination:
     * If a correct process p proposes, it eventually decides or aborts,
     * If a correct process decides, no correct process aborts infinitely often,
     * If there is a time after which a single correct process p proposes a value sufficiently many times, p eventually decides,
@@ -41,9 +41,9 @@ The code is separated into three different parts:
 
 * The main class (`Main.java`), that initiates the Akka system, and sends some references and initial messages to the actors.
 * The actor, or process class (`Process.java`), that represents an Akka actor, which is like a thread with its own local memory, that can communicate with others only using message-passing. The actor has a method `onReceive()` in which we can choose how it reacts to a new message. Each process knows the references of all others: they are saved in an instance of the class `Members.java`.
-The message classes (`AbortMsg.java`, `AckMsg.java`, `CrashMsg.java`, `DecideMsg.java`, `GatherMsg.java`, `HoldMsg.java`, `ImposeMsg.java`, `LaunchMsg.java`, `OfconsProposerMsg.java`, `ReadMsg.java`), that are the different types of messages sent between the actors. An actor can distinguish messages in its `onReceive()` method using:
+The message classes (`AbortMsg.java`, `AckMsg.java`, `CrashMsg.java`, `DecideMsg.java`, `GatherMsg.java`, `HoldMsg.java`, `ImposeMsg.java`, `LaunchMsg.java`, `OfconsProposerMsg.java`, `ReadMsg.java`), that are the different types of messages sent between the actors. An actor can distinguish messages in its `onReceive()` method using:<br>
  `if (message instanceof ...Msg)`.
-* We also have a message type to start the time (StartTime.java), which we use here for benchmarking.
+* We also have a message type to start the time (`StartTime.java`), which we use here for benchmarking.
 
 ## Performance
 We studied the performance of this algorithm by varying the number of processes from 3 to 10 to 100, the number of faulty processes from 1 to 4 to 49, and varying the hold delay in the range (0.5s, 1s, 1.5s, 2s).
