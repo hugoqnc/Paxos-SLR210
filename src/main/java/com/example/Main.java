@@ -7,7 +7,7 @@ public class Main {
 
     public static int N = 100;
     public static int f = 49;
-    public static int ts = 100;
+    public static int ts = 1000;
 
 
     public static void main(String[] args) throws InterruptedException {

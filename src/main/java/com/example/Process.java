@@ -28,7 +28,7 @@ public class Process extends UntypedAbstractActor {
     private boolean faultProne = false;
     private boolean silent = false;
     private double crashProbability = 0.2; //to configure
-    private int timeToProposeAgain = 50; //to configure, in ms
+    private int timeToProposeAgain = 1000; //to configure, in ms
     private boolean hold = false;
     private boolean decided = false;
 
@@ -37,7 +37,7 @@ public class Process extends UntypedAbstractActor {
     private int ackCount = 0;
     private int stateEntryZero = 0;
 
-    private boolean verbose = true; //to configure
+    private boolean verbose = false; //to configure
 
 
     public Process(int ID, int nb) {
@@ -107,7 +107,7 @@ public class Process extends UntypedAbstractActor {
         int numberOfStateEntries = getNumberOfEntries(states)+stateEntryZero;
          
 
-        log.info("p"+self().path().name() +" entries: "+numberOfStateEntries+" | " + states.toString());
+        //log.info("p"+self().path().name() +" entries: "+numberOfStateEntries+" | " + states.toString());
         if (numberOfStateEntries>(N/2) && oldGatherBallot!=newBallot){ //majority
             //log.info(newBallot+"");
             oldGatherBallot = newBallot;
@@ -130,7 +130,7 @@ public class Process extends UntypedAbstractActor {
 
     private void imposeReceived(int newBallot, Integer v, ActorRef pj){
         if (readBallot > newBallot || imposeBallot > newBallot) {
-            log.info("p"+self().path().name() +": "+readBallot+" > "+newBallot+" || "+imposeBallot +">"+ newBallot);
+            //log.info("p"+self().path().name() +": "+readBallot+" > "+newBallot+" || "+imposeBallot +">"+ newBallot);
 /*             if (readBallot > newBallot){
                 log.info("read>new");
             }
@@ -182,9 +182,9 @@ public class Process extends UntypedAbstractActor {
             oldAbortBallot = ballot;
             proposingStatus = false;
             if(!hold){
-                /* getContext().system().scheduler().scheduleOnce(Duration.ofMillis(timeToProposeAgain), getSelf(), "propose_again", getContext().system().dispatcher(), ActorRef.noSender());
-                //ofconsProposeReceived(proposal);
-                log.info(self().path().name() +" has hold="+hold); */
+                //getContext().system().scheduler().scheduleOnce(Duration.ofMillis(timeToProposeAgain), getSelf(), "propose_again", getContext().system().dispatcher(), ActorRef.noSender());
+                ofconsProposeReceived(proposal);
+                //log.info(self().path().name() +" has hold="+hold); 
             }
             
         }
@@ -250,7 +250,7 @@ public class Process extends UntypedAbstractActor {
                 launchReceived();
             }
             else if (message instanceof HoldMsg) {
-                if (verbose){log.info("p"+self().path().name()+" received HOLD   from p" + getSender().path().name());}
+                if (true){log.info("p"+self().path().name()+" received HOLD   from p" + getSender().path().name());}
                 hold = true;
             }
             else if(message instanceof StartTime){
@@ -258,7 +258,7 @@ public class Process extends UntypedAbstractActor {
             }
             else if(message instanceof String){
                 if ((String)message=="propose_again"){
-                    if (!hold && !proposingStatus) {ofconsProposeReceived(proposal);}
+                    if (!hold && !proposingStatus && false) {ofconsProposeReceived(proposal);}
                     getContext().system().scheduler().scheduleOnce(Duration.ofMillis(timeToProposeAgain), getSelf(), "propose_again", getContext().system().dispatcher(), ActorRef.noSender());
                 }
             }
