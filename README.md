@@ -26,7 +26,7 @@ and
 The caveat is that for the Oracle to function, the system needs to be eventually synchronous, meaning that after a certain amount of time, the communication delay will be bounded, this is what allows Paxos to solve consensus without violating the CAP theorem.
 
 ## Main idea of the algorithm<a name="idea"/>
-This project is an implementation of the **Synod Obstruction-Free Consensus**. This algorithm tries to reach a consensus, and to eventually decide 0 or 1.
+This project is an implementation of the **Synod Obstruction-Free Consensus**. This algorithm tries to reach a consensus, to eventually decide 0 or 1.
 The main idea of this algorithm is to reach consensus in two parts:
 * A proposing process first wants to be “heard” by a majority of processes. It proposes and then waits to receive a majority of *GATHER* messages. If it receives this majority of *GATHER* acknowledgments, this means that a majority of processes are listening to him and waiting for his value. As a set can’t contain two distinct majorities, only one proposal can receive a majority of *GATHER* messages without aborting.
 * When being heard by a majority of processes, a proposing process wants to impose its value. It will send its value to everyone and will wait for a majority of ACK messages. If it is the case, then the process will finally *DECIDE* his value, and inform all other processes that he decided. All other processes will decide on the same value, ultimately reaching consensus.
@@ -41,9 +41,9 @@ The code is separated into three different parts:
 
 * The main class (`Main.java`), that initiates the Akka system, and sends some references and initial messages to the actors.
 * The actor, or process class (`Process.java`), that represents an Akka actor, which is like a thread with its own local memory, that can communicate with others only using message-passing. The actor has a method `onReceive()` in which we can choose how it reacts to a new message. Each process knows the references of all others: they are saved in an instance of the class `Members.java`.
-The message classes (`AbortMsg.java`, `AckMsg.java`, `CrashMsg.java`, `DecideMsg.java`, `GatherMsg.java`, `HoldMsg.java`, `ImposeMsg.java`, `LaunchMsg.java`, `OfconsProposerMsg.java`, `ReadMsg.java`), that are the different types of messages sent between the actors. An actor can distinguish messages in its `onReceive()` method using:<br>
- `if (message instanceof ...Msg)`.
-* We also have a message type to start the time (`StartTime.java`), which we use here for benchmarking.
+* The message classes (`AbortMsg.java`, `AckMsg.java`, `CrashMsg.java`, `DecideMsg.java`, `GatherMsg.java`, `HoldMsg.java`, `ImposeMsg.java`, `LaunchMsg.java`, `OfconsProposerMsg.java`, `ReadMsg.java`), that are the different types of messages sent between the actors. An actor can distinguish messages in its `onReceive()` method using:<br>
+ `if (message instanceof ...Msg)`.<br>
+We also have a message type to start the time (`StartTime.java`), which we use here for benchmarking.
 
 ## Performance
 We studied the performance of this algorithm by varying the number of processes from 3 to 10 to 100, the number of faulty processes from 1 to 4 to 49, and varying the hold delay in the range (0.5s, 1s, 1.5s, 2s).
