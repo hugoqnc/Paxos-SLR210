@@ -28,7 +28,7 @@ public class Process extends UntypedAbstractActor {
     private boolean faultProne = false;
     private boolean silent = false;
     private double crashProbability = 0.2; //to configure
-    private int timeToProposeAgain = 1000; //to configure, in ms
+    private int timeToProposeAgain = 50; //to configure, in ms
     private boolean hold = false;
     private boolean decided = false;
 
@@ -183,7 +183,7 @@ public class Process extends UntypedAbstractActor {
             proposingStatus = false;
             if(!hold){
                 //getContext().system().scheduler().scheduleOnce(Duration.ofMillis(timeToProposeAgain), getSelf(), "propose_again", getContext().system().dispatcher(), ActorRef.noSender());
-                ofconsProposeReceived(proposal);
+                //ofconsProposeReceived(proposal);
                 //log.info(self().path().name() +" has hold="+hold); 
             }
             
@@ -258,7 +258,7 @@ public class Process extends UntypedAbstractActor {
             }
             else if(message instanceof String){
                 if ((String)message=="propose_again"){
-                    if (!hold && !proposingStatus && false) {ofconsProposeReceived(proposal);}
+                    if (!hold && !proposingStatus) {ofconsProposeReceived(proposal);}
                     getContext().system().scheduler().scheduleOnce(Duration.ofMillis(timeToProposeAgain), getSelf(), "propose_again", getContext().system().dispatcher(), ActorRef.noSender());
                 }
             }
