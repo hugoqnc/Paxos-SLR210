@@ -5,9 +5,9 @@ import java.util.*;
 
 public class Main {
 
-    public static int N = 100;
-    public static int f = 49;
-    public static int ts = 100;
+    public static int N = 10;
+    public static int f = 4;
+    public static int ts = 1000;
 
 
     public static void main(String[] args) throws InterruptedException {
@@ -46,11 +46,9 @@ public class Main {
             actor.tell(new LaunchMsg(), ActorRef.noSender());
         }
         
-        //OfconsProposerMsg opm = new OfconsProposerMsg(100);
-        //references.get(f).tell(opm, ActorRef.noSender());
-        //System.out.println("AVANT");
+
         Thread.sleep(ts);
-        //System.out.println("APRES");
+
         System.out.println("LEADER: p"+references.get(f).path().name());
         for (int i = 0; i < N; i++) {
             if (i!=f){

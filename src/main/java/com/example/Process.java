@@ -37,7 +37,7 @@ public class Process extends UntypedAbstractActor {
     private int ackCount = 0;
     private int stateEntryZero = 0;
 
-    private boolean verbose = false; //to configure
+    private boolean verbose = false; //true: all outputs | false: only decide output
 
 
     public Process(int ID, int nb) {
@@ -130,14 +130,6 @@ public class Process extends UntypedAbstractActor {
 
     private void imposeReceived(int newBallot, Integer v, ActorRef pj){
         if (readBallot > newBallot || imposeBallot > newBallot) {
-            //log.info("p"+self().path().name() +": "+readBallot+" > "+newBallot+" || "+imposeBallot +">"+ newBallot);
-/*             if (readBallot > newBallot){
-                log.info("read>new");
-            }
-            if (imposeBallot > newBallot){
-                log.info("impose>new");
-            } */
-            //log.info("i: "+getSender().path().name() + " sends ABORT to " + pj.path().name());
             pj.tell(new AbortMsg(newBallot), this.getSender());
         } else {
             estimate = v;
@@ -182,9 +174,7 @@ public class Process extends UntypedAbstractActor {
             oldAbortBallot = ballot;
             proposingStatus = false;
             if(!hold){
-                //getContext().system().scheduler().scheduleOnce(Duration.ofMillis(timeToProposeAgain), getSelf(), "propose_again", getContext().system().dispatcher(), ActorRef.noSender());
                 //ofconsProposeReceived(proposal);
-                //log.info(self().path().name() +" has hold="+hold); 
             }
             
         }
