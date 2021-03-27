@@ -27,7 +27,7 @@ The caveat is that for the Oracle to function, the system needs to be eventually
 
 ## Main idea of the algorithm<a name="idea"/>
 
-![](resources/SynodDiagram.png)
+![](resources/SynodDiagram.png)
 
 This project is an implementation of the **Synod Obstruction-Free Consensus**. This algorithm tries to reach a consensus, to eventually decide 0 or 1.
 The main idea of this algorithm is to reach consensus in two parts:
