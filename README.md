@@ -26,6 +26,9 @@ and
 The caveat is that for the Oracle to function, the system needs to be eventually synchronous, meaning that after a certain amount of time, the communication delay will be bounded, this is what allows Paxos to solve consensus without violating the CAP theorem.
 
 ## Main idea of the algorithm<a name="idea"/>
+
+![](resources/SynodDiagram.png)
+
 This project is an implementation of the **Synod Obstruction-Free Consensus**. This algorithm tries to reach a consensus, to eventually decide 0 or 1.
 The main idea of this algorithm is to reach consensus in two parts:
 * A proposing process first wants to be “heard” by a majority of processes. It proposes and then waits to receive a majority of *GATHER* messages. If it receives this majority of *GATHER* acknowledgments, this means that a majority of processes are listening to him and waiting for his value. As a set can’t contain two distinct majorities, only one proposal can receive a majority of *GATHER* messages without aborting.
